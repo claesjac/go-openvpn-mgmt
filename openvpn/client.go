@@ -88,7 +88,7 @@ func NewClient(conn io.ReadWriter, eventCh chan<- Event) *MgmtClient {
 // OpenVPN will create a suitable management port if launched with the
 // following command line option:
 //
-//    --management <ipaddr> <port>
+//	--management <ipaddr> <port>
 //
 // Address may an IPv4 address, an IPv6 address, or a hostname that resolves
 // to either of these, followed by a colon and then a port number.
@@ -97,8 +97,7 @@ func NewClient(conn io.ReadWriter, eventCh chan<- Event) *MgmtClient {
 // domain socket. To do this, pass an absolute path to the socket as
 // the target address, having run OpenVPN with the following options:
 //
-//    --management /path/to/socket unix
-//
+//	--management /path/to/socket unix
 func Dial(addr string, eventCh chan<- Event) (*MgmtClient, error) {
 	proto := "tcp"
 	if len(addr) > 0 && addr[0] == '/' {
@@ -119,7 +118,7 @@ func Dial(addr string, eventCh chan<- Event) (*MgmtClient, error) {
 // OpenVPN can be instructed to activate a management hold on startup by
 // running it with the following option:
 //
-//     --management-hold
+//	--management-hold
 //
 // Instructing OpenVPN to hold gives your client a chance to connect and
 // do any necessary configuration before a connection proceeds, thus avoiding
@@ -261,6 +260,10 @@ func (c *MgmtClient) Pid() (int, error) {
 	return pid, nil
 }
 
+func (c *MgmtClient) SendCommand(cmd []byte) error {
+	return c.sendCommand(cmd)
+}
+
 func (c *MgmtClient) sendCommand(cmd []byte) error {
 	_, err := c.wr.Write(cmd)
 	if err != nil {
@@ -275,6 +278,10 @@ func (c *MgmtClient) sendCommand(cmd []byte) error {
 //
 // The buffer given in 'payload' *must* end with a newline,
 // or else the protocol will be broken.
+func (c *MgmtClient) SendCommandPayload(payload []byte) error {
+	return c.sendCommandPayload(payload)
+}
+
 func (c *MgmtClient) sendCommandPayload(payload []byte) error {
 	_, err := c.wr.Write(payload)
 	if err != nil {
@@ -286,6 +293,10 @@ func (c *MgmtClient) sendCommandPayload(payload []byte) error {
 	}
 	_, err = c.wr.Write(newline)
 	return err
+}
+
+func (c *MgmtClient) ReadCommandResult() ([]byte, error) {
+	return c.readCommandResult()
 }
 
 func (c *MgmtClient) readCommandResult() ([]byte, error) {
