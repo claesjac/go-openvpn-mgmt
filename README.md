@@ -14,7 +14,7 @@ existing features will be gratefully accepted.
 ## Installation
 
 ```
-go get github.com/apparentlymart/go-openvpn-mgmt/openvpn
+go get github.com/claesjac/go-openvpn-mgmt/openvpn
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ First, we can import the package:
 
 ```go
 import (
-    "github.com/apparentlymart/go-openvpn-mgmt/openvpn"
+    "github.com/claesjac/go-openvpn-mgmt/openvpn"
 )
 ```
 
