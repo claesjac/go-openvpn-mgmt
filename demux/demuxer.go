@@ -41,14 +41,20 @@ func Demultiplex(r io.Reader, replyCh, eventCh chan<- []byte) {
 			continue
 		}
 
+		cbuf := make([]byte, len(buf))
+		i := copy(cbuf, buf)
+		if i < 1 {
+			continue
+		}
+
 		// Asynchronous messages always start with > to differentiate
 		// them from replies.
-		if buf[0] == '>' {
+		if cbuf[0] == '>' {
 			// Trim off the > when we post the message, since it's
 			// redundant after we've demuxed.
-			eventCh <- buf[1:]
+			eventCh <- cbuf[1:]
 		} else {
-			replyCh <- buf
+			replyCh <- cbuf
 		}
 	}
 
